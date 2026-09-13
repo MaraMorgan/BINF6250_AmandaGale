@@ -55,17 +55,34 @@ You will be expected to consider two (2) special types of keys:
 from pprint import pprint
 
 # Modify this function signature and fill in the details
-def parse_line(line): # argument:string
-    strip_header = line.strip().split('\t')
+def parse_line(vcf_line): # argument:string
+    """
+    Takes a string and returns a list
+    :param line: string
+    :return: list
+    """
+
+    # strip lines and specify INFO column
+    strip_header = vcf_line.strip().split('\t')
     extract_info_column = strip_header[7]
 
-    # Extracting values from INFO
+    # Separate chunks delineated by semicolons in INFO string
+    separate_semicolon_chunks = extract_info_column.split(';')
 
-    # INFO columns is in key=value;key=value;....... so we need to split the semicolons, then the key/value pairs
-    # which operations split semicolon chunks and dicts?
-    # we need to do this first before working with AF_EXAC
-    if AF_EXAC is present
-        if significance of AF_EXAC < 0.0001 # 'AF_EXAC < 0.0001'
+    # Further separate key:value chunks
+    # define dictionaries before the loop
+    af_exac = []
+    clndn = []
+    for chunk in separate_semicolon_chunks:
+        key, value = chunk.split('=')
+        if key == 'AF_EXAC':
+            af_exac = value
+        elif key == 'CLNDN':
+            clndn = value
+
+
+
+     if significance of AF_EXAC < 0.0001 # 'AF_EXAC < 0.0001'
             return list of CLNDN disease names, skip "not specified" and/or "not provided"
                 # how to handle cases where disease names are piped " | " ?
 
@@ -89,7 +106,7 @@ def update_dictionary(#key;value pair, something else here)
 
 
 # Modify this function signature and fill in the details
-def read_file(clinvar)
+def read_file(clinvar, r)
     with open('clinvar_20190923_short.vcf', 'r') as f:
         for line in f:
             if line.startswith('#') #skip all lines that start with '#'
