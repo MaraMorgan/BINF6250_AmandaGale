@@ -1,74 +1,88 @@
 from pprint import pprint
 
 
-def read_file(filename):
-
-    # initialize empty dict
-    i = 1
-    # open file
-    with open(filename, 'r') as f:
-        for line in f:
-            if i < 50:
-                parse_line(line)
-                i += 1
-
-    # loop through lines of file
-        # call parse_line
-        # if list not empty
-            # call update_dictionary
-    # return dictionary
-
-
 def parse_line(this_line):
     """Takes string and returns a list."""
 
     print(this_line.strip())
-    # initialize empty list
-    clndn_list = []
-    # if line starts with INFO, skip
+    clndn_list = []   # list to track clndn
+
+    # if line starts with #, skip
     if not this_line.startswith('#'):
-        # search for af_exac
+        # search for AF_EXAC
         af_start = this_line.find('AF_EXAC=')
-        if af_start != -1:
+
+        if af_start != -1:    # find function returns -1 if string match not found
             print("AF_EXAC entry found")
             # extract AF_EXAC
-            this_line = this_line[af_start:]
-            af_end = this_line.find(';')
-            print("AF_EXAC string:", this_line[0:af_end])
-            af_value = float(this_line[0:af_end].split('=')[1])
+            afexac_line = this_line[af_start:]
+            af_end = afexac_line.find(';')
+            ##print("AF_EXAC string:", afexac_line[0:af_end])
+            af_value = float(afexac_line[0:af_end].split('=')[1])
             print("AF_EXAC value:", af_value)
-            # check significance
+
+            # check af_exac significance
             if af_value >= 0.0001:
                 print("AF value not rare.\n")
                 pass
             else:
-                print("Rare AF value found!\n")
-                # parse CDN - own function?
-                # separate things by pipe into separate list elements
+                print("Rare AF value found!")
+                clndn_start = this_line.find("CLNDN=")
+                clndn_line = this_line[clndn_start:]
+                # extract clndnd string
+                clndn_end = clndn_line.find(';')
+                print("CLNDN string:", clndn_line[0:clndn_end])
+                clndn_value = clndn_line[0:clndn_end].split('=')[1]
+                # separate elements by pipe into separate list elements
+                if '|' in clndn_value:
+                    print("Pipe found:", clndn_value)
+                clndn_list = clndn_value.split('|')
                 # drop list elements that are not_specified or not_provided
-                # replace initial list with new list (list may be empty)
-        else:
-            print('Skipping line, not an AF_EXEC entry.\n')
+                clean_diseases = []
+                for disease in clndn_list:
+                    if disease != "not_specified" and disease != "not_provided":
+                        clean_diseases.append(disease)
+                clndn_list = list(set(clean_diseases))
+                print(f"CLNDN list: {clndn_list}")
 
         # AF_EXAC not present
+        else:
+            print('Skipping line, not an AF_EXAC entry.\n')
+
+    # line starts with #
     else:
         print("Skipping line, not a legitimate entry.\n")
-        # skip line, return None or return empty list
 
     return clndn_list
 
 
-# update_dictionary()
+def update_dictionary(clndn_dict, clndn_list):
     """Takes in dictionary and list and returns a dictionary."""
-    # loop over elements in list
-        # if key exists in dictionary
-            # add one to value
-        # else
-            # initialize key with value of 1
 
-    # return dictionary
+    for disease in clndn_list:
+        if disease in clndn_dict:   # if disease exists in dictionary
+            clndn_dict[disease] += 1   # add to counter
+        else:    # if disease does not exist yet
+            clndn_dict[disease] = 1    # initialize counter
+
+    return clndn_dict
+
+
+def read_file(filename):
+
+    clndn_dict = {}
+
+    with open(filename, 'r') as f:
+        for line in f:
+            clndn_list = parse_line(line)   # parse the lines of the file for disease
+            if clndn_list:   # if disease list not empty, update dict
+                print("Diseases associated with variant. Updating Dictionary.\n")
+                update_dictionary(clndn_dict, clndn_list)
+
+    print("Final disease count:")
+    return clndn_dict
+
 
 if __name__ == "__main__":
-    print(read_file("clinvar_20190923_short.vcf"))
-    #pprint(read_file("clinvar_20190923_short.vcf"))
+    pprint(read_file("clinvar_20190923_short.vcf"))
 
