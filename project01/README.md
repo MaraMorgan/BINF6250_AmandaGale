@@ -1,11 +1,15 @@
 # Introduction
 Description of the project
 
+## Subintro
+
+### Subsubintro
+
 # Pseudocode
 Put pseudocode in this box:
 
 ```
-Some pseudocode here
+x = 10
 ```
 
 # Successes
