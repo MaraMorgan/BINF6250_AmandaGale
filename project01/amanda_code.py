@@ -12,7 +12,7 @@ def parse_line(this_line):
         # search for AF_EXAC
         af_start = this_line.find('AF_EXAC=')
 
-        if af_start != -1:
+        if af_start != -1:    # find function returns -1 if string match not found
             print("AF_EXAC entry found")
             # extract AF_EXAC
             afexac_line = this_line[af_start:]
@@ -31,15 +31,18 @@ def parse_line(this_line):
                 clndn_line = this_line[clndn_start:]
                 # extract clndnd string
                 clndn_end = clndn_line.find(';')
-                ##print("CLNDN string:", clndn_line[0:clndn_end])
+                print("CLNDN string:", clndn_line[0:clndn_end])
                 clndn_value = clndn_line[0:clndn_end].split('=')[1]
                 # separate elements by pipe into separate list elements
+                if '|' in clndn_value:
+                    print("Pipe found:", clndn_value)
                 clndn_list = clndn_value.split('|')
                 # drop list elements that are not_specified or not_provided
-                if 'not_provided' in clndn_list:
-                    clndn_list = clndn_list.remove('not_provided')
-                if 'not_specified' in clndn_list:
-                    clndn_list = clndn_list.remove('not_specified')
+                clean_diseases = []
+                for disease in clndn_list:
+                    if disease != "not_specified" and disease != "not_provided":
+                        clean_diseases.append(disease)
+                clndn_list = list(set(clean_diseases))
                 print(f"CLNDN list: {clndn_list}")
 
         # AF_EXAC not present
@@ -68,17 +71,13 @@ def update_dictionary(clndn_dict, clndn_list):
 def read_file(filename):
 
     clndn_dict = {}
-    i = 1
-    # loop through lines of file
+
     with open(filename, 'r') as f:
         for line in f:
-            if i < 100:
-                # parse the lines of the file for disease
-                clndn_list = parse_line(line)
-                if clndn_list:   # if disease list not empty, update dict
-                    print("Diseases associated with variant. Updating Dictionary.\n")
-                    update_dictionary(clndn_dict, clndn_list)
-                i += 1
+            clndn_list = parse_line(line)   # parse the lines of the file for disease
+            if clndn_list:   # if disease list not empty, update dict
+                print("Diseases associated with variant. Updating Dictionary.\n")
+                update_dictionary(clndn_dict, clndn_list)
 
     print("Final disease count:")
     return clndn_dict
