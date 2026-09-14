@@ -82,7 +82,11 @@ The most valuable thing I picked up from this project was Amanda's print-stateme
 Overall, I really enjoyed working with Amanda and Mara. Amanda has more experience with both Python and GitHub, and she was a patient, thorough teacher rather than someone who just handed us answers. When our approaches diverged, whether in code design or in how to interpret the instructions, we talked it through as a group, asked each other real questions, and reached a shared decision rather than any one person deciding for the group. That collaborative problem-solving was, honestly, the best part of this project.
 
 ## Other member:  Mara
-Other members' reflections on the project
+The operations performed in this project not only have real-life use-cases but was very beneficial for reinforcing some core concepts about string manipulation. Additionally, learning GitHub, which I'd never previously used, will be useful moving forward.  
+ 
+I found writing pseudocode in plain English to be a very practical skill. I have not had much experience writing it and tended to also include lines of code while formatting my ideas, so keeping the format consistent made writing the actual code easier. Additionally, seeing Amanda use print statements to check lines of code is a great idea, and one that I will be using moving forward. I'd been taught that more print statements was a good idea, but I hadn't seen it in practice before. 
+ 
+Amanda was an excellent group leader and was very patient with both me and Ildiko working through our code and learning GitHub and had an in-depth explanation for every question asked. Ildiko and I, having similar Python experience, were able to talk each other through our various knowledge gaps, and effectively communicate any shared coding uncertainties. I found it very valuable to learn to work collaboratively in a remote environment.  
 
 # Generative AI Appendix
 Generative AI was not used in this project
