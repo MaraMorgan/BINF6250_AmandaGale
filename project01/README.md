@@ -6,9 +6,8 @@ The program is structured into three functions, each with a single responsibilit
 Our group, Amanda, Mara, and Ildiko, collaborated using a GitHub fork-and-pull-request workflow, with Amanda as group leader.  It was a valuable exercise in working asynchronously through GitHub, making decisions and writing code as a group, and writing a substantial amount of string operations to parse a VCF file.
 
 # Pseudocode
-from pprint import pprint
 
-# read_file()
+### read_file()
 
     # initialize empty dict
     # open file
@@ -19,29 +18,31 @@ from pprint import pprint
     # return dictionary
 
 
-# parse_line()
-    """Takes string and returns a list."""
-    # initialize empty list
+### parse_line()
+    """Takes a line from a vcf file as a string and returns a list of CLNDN 
+    diseases or an empty string where applicable."""
 
-    ## assuming AS_EXAC present
-    # if as_exac:
-        # extract AF_EXAC
+    # initialize empty list
+    # skip line if # at start
+    # check for AF_EXAC
+    # if AF_EXAC exists:
+        # extract AF_EXAC using find function and string truncating method
         # if not significant
-           # continue
+           # skip line
         # else
-            # parse CDN - own function?
+            # parse CLNDN using same method as AF_EXAC
             # separate things by pipe into separate list elements
             # drop list elements that are not_specified or not_provided
-            # replace initial list with new list (list may be empty)
+            # remove potential duplicates
 
-     ## AF_EXAC not present
+    ## AF_EXAC not present
     # else:
         # skip line, return None or return empty list
 
     # return list
 
 
-# update_dictionary()
+### update_dictionary()
     """Takes in dictionary and list and returns a dictionary."""
     # loop over elements in list
         # if key exists in dictionary
@@ -50,13 +51,6 @@ from pprint import pprint
             # initialize key with value of 1
 
     # return dictionary
-
-if __name__ == "__main__":
-    #pprint(read_file("clinvar_20190923_short.vcf"))
-
-```
-x = 10
-```
 
 # Successes
 We originally coded individually and then compared our code, and found that comparing our different approaches was one of the most useful parts of the process. Amanda's version follows the instructions very literally.  Her read_file does no filtering of its own and simply passes every line to parse_line, which then has to check for header lines, check for AF_EXAC, and handle everything else itself, making parse_line longer and more complex. Ildiko and Mara both instead had read_file filter out header lines before anything reaches parse_line, which is more efficient, but relies on read_file taking on some of the checking that the instructions describe as parse_line's job. Both approaches produce functional, correct programs. Since neither approach was wrong, working through this tradeoff, strict adherence to the assignment's described function boundaries versus overall efficiency, was a genuinely useful exercise.

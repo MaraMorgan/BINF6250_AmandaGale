@@ -42,7 +42,7 @@ def parse_line(this_line):
                 for disease in clndn_list:
                     if disease != "not_specified" and disease != "not_provided":
                         clean_diseases.append(disease)
-                clndn_list = list(set(clean_diseases))
+                clndn_list = list(set(clean_diseases))   # remove potential duplicates
                 print(f"CLNDN list: {clndn_list}")
 
         # AF_EXAC not present
